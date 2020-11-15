@@ -1,6 +1,10 @@
 package com.example.springbootsendactivationlink.entity;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -10,13 +14,21 @@ public class UserEntity {
     @Column(name = "user_id")
     private Long userId;
 
+    @NotNull
+    @Email
     private String emailId;
 
+    @NotNull
+    @Size(min=2, max=15)
     private String password;
 
+    @NotNull
+    @Size(min=2, max=40)
     @Column(name = "first_name")
     private String firstName;
 
+    @NotNull
+    @Size(min=2, max=40)
     @Column(name = "last_name")
     private String lastName;
 
