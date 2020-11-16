@@ -4,7 +4,7 @@ import com.diogonunes.jcolor.AnsiFormat;
 import com.example.springbootsendactivationlink.entity.ConfirmationToken;
 import com.example.springbootsendactivationlink.entity.UserEntity;
 import com.example.springbootsendactivationlink.service.ConfirmationTokenService;
-import com.example.springbootsendactivationlink.service.UserTokenService;
+import com.example.springbootsendactivationlink.service.UserService;
 import com.example.springbootsendactivationlink.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -23,12 +23,12 @@ import static com.diogonunes.jcolor.Attribute.*;
 
 @Controller
 public class UserAccountController {
-    //for printing color text
+    //note: for printing color text
     AnsiFormat fInfo = new AnsiFormat(CYAN_TEXT());
     AnsiFormat fError = new AnsiFormat(YELLOW_TEXT(), RED_BACK());
 
     @Autowired
-    private UserTokenService userTokenService;
+    private UserService userService;
 
     @Autowired
     private ConfirmationTokenService confirmationTokenService;
@@ -57,20 +57,20 @@ public class UserAccountController {
             modelAndView.setViewName("register");
             return modelAndView;
         }
-        UserEntity existingUser = userTokenService.findByEmailIdIgnoreCase(userEntity.getEmailId());
+        UserEntity existingUser = userService.findByEmailIgnoreCase(userEntity.getEmail());
         if(existingUser != null){
-            modelAndView.addObject("message","This email already exists!");
-            modelAndView.setViewName("error");
+            modelAndView.addObject("ErrorMessage","This email already exists!");
+            modelAndView.setViewName("register");
         }
 
          else {
-             userTokenService.save(userEntity);
+             userService.save(userEntity);
 
             ConfirmationToken confirmationToken = new ConfirmationToken(userEntity);
 
             confirmationTokenService.save(confirmationToken);
 
-            String userEmail = userEntity.getEmailId();
+            String userEmail = userEntity.getEmail();
             System.out.println(colorize("[/register value] confirmation token: " + confirmationToken.getConfirmationToken(), fInfo));
             System.out.println(colorize("user email: " + userEmail,fInfo));
 
@@ -85,7 +85,7 @@ public class UserAccountController {
 
             emailService.sendEmail(mailMessage);
 
-            modelAndView.addObject("emailId",userEntity.getEmailId());
+            modelAndView.addObject("emailId",userEntity.getEmail());
 
             modelAndView.setViewName("successfulRegistration");
 
@@ -103,9 +103,9 @@ public class UserAccountController {
         System.out.println(colorize("confirm-account-token: " + token,fInfo));
 
         if (token != null){
-            UserEntity userEntity = userTokenService.findByEmailIdIgnoreCase(token.getUserEntity().getEmailId());
+            UserEntity userEntity = userService.findByEmailIgnoreCase(token.getUserEntity().getEmail());
             userEntity.setEnabled(true);
-            userTokenService.save(userEntity);
+            userService.save(userEntity);
             modelAndView.setViewName("accountVerified");
         }
         else {

@@ -19,7 +19,7 @@ public class ConfirmationToken {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @OneToOne(targetEntity = UserEntity.class,fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = UserEntity.class,cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private UserEntity userEntity;
 

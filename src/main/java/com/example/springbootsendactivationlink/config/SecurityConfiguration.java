@@ -1,5 +1,6 @@
 package com.example.springbootsendactivationlink.config;
 
+import com.example.springbootsendactivationlink.service.CustomUserDetailsService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,7 @@ import javax.sql.DataSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private DataSource dataSource;
@@ -70,11 +71,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .permitAll()
 
 
-                    //note: Config for Logout Page
+                        //note: Config for Logout Page
                         .and()
                             .logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful")
                             .permitAll()
-
+                        //note: Config Remember Me.
                         .and()
                             .rememberMe().tokenRepository(this.persistentTokenRepository())
                             .tokenValiditySeconds(1*24*60*60) // 24h

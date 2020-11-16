@@ -8,15 +8,13 @@
 <body>
 <!--/*@thymesVar id="userEntity" type="templates"*/-->
 <form action="#" th:action="@{/register}" th:object="${userEntity}" method="post">
-            <label>First Name</label>
-            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
-            <input th:field="*{firstName}" type="text" name="firstName">
-            <label >Last Name</label>
-            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" ></span>
-            <input th:field="*{lastName}" type="text" name="lastName">
+            <span th:text="${ErrorMessage}"></span>
+            <label >Username</label>
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" ></span>
+            <input th:field="*{username}" type="text" name="lastName">
             <label >Email</label>
-            <span th:if="${#fields.hasErrors('emailId')}" th:errors="*{emailId}"></span>
-            <input th:field="*{emailId}" type="text" name="emailId">
+            <span th:if="${#fields.hasErrors('emailId')}" th:errors="*{email}"></span>
+            <input th:field="*{email}" type="text" name="emailId">
             <label >Password</label>
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
             <input th:field="*{password}" type="password" name="password">

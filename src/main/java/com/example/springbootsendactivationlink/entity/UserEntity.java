@@ -5,6 +5,7 @@ import com.sun.istack.NotNull;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -16,25 +17,35 @@ public class UserEntity {
 
     @NotNull
     @Email
-    private String emailId;
+    private String email;
 
     @NotNull
-    @Size(min=2, max=15)
+    @Size(min=5, max=15)
     private String password;
 
     @NotNull
-    @Size(min=2, max=40)
-    @Column(name = "first_name")
-    private String firstName;
+    @Size(min=5, max=15)
+    @Column(name = "username")
+    private String username;
 
-    @NotNull
-    @Size(min=2, max=40)
-    @Column(name = "last_name")
-    private String lastName;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles",
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<RoleEntity> roleEntities;
 
     private boolean isEnabled;
 
     public UserEntity() {
+    }
+
+    public Set<RoleEntity> getRoleEntities() {
+        return roleEntities;
+    }
+
+    public void setRoleEntities(Set<RoleEntity> roleEntities) {
+        this.roleEntities = roleEntities;
     }
 
     public Long getUserId() {
@@ -45,12 +56,12 @@ public class UserEntity {
         this.userId = userId;
     }
 
-    public String getEmailId() {
-        return emailId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -61,20 +72,12 @@ public class UserEntity {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public boolean isEnabled() {
